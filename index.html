@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Reddit – r/weather – What causes lightning?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+  <style>
+    :root{
+      --bg:#f6f7f8;
+      --card:#ffffff;
+      --text:#1a1a1b;
+      --muted:#6b6f76;
+      --border:#e5e7eb;
+      --accent:#ff4500; /* reddit orange */
+      --link:#0079d3;
+      --pill:#eef1f3;
+      --radius:10px;
+      --colW: 760px;
+      --icon:#6b6f76;
+    }
+    html,body{
+      margin:0;height:100%;background:var(--bg);color:var(--text);
+      font-family:system-ui,-apple-system,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial;
+      -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+    }
+    a{color:var(--link);text-decoration:none;pointer-events:none}
+    button{pointer-events:none}
+
+    /* Header */
+    .hdr{
+      position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);
+      padding:10px 14px;display:flex;align-items:center;gap:14px;
+    }
+    .logo{display:flex;align-items:center;gap:8px;font-weight:700;}
+    /* Simple Snoo-in-a-circle */
+    .snoo{
+      width:26px;height:26px;border-radius:50%;background:var(--accent);position:relative;display:grid;place-items:center;
+    }
+    .snoo svg{width:18px;height:18px;display:block}
+    .snoo .ant{position:absolute;right:-3px;top:-3px;width:7px;height:7px;border-radius:50%;background:#fff;border:2px solid var(--accent);}
+    .hdr .search{flex:1;display:flex}
+    .hdr .search input{
+      width:100%;border:1px solid var(--border);background:#f0f2f5;border-radius:999px;padding:10px 14px;outline:none;font-size:14px;
+    }
+    .auth{display:flex;gap:8px}
+    .btn{border:1px solid var(--border);background:#fff;border-radius:999px;padding:8px 12px;font-size:14px}
+    .btn.primary{background:#000;color:#fff;border-color:#000}
+
+    /* Layout */
+    .wrap{max-width:1120px;margin:18px auto;display:grid;grid-template-columns:minmax(0,var(--colW)) 320px;gap:18px;padding:0 12px}
+    @media (max-width:980px){.wrap{grid-template-columns:1fr}.sidebar{display:none}}
+
+    /* Post */
+    .post{
+      background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+      display:grid;grid-template-columns:60px 1fr;overflow:hidden;
+    }
+    .vote-rail{
+      background:#f8f9fa;border-right:1px solid var(--border);
+      display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:8px;color:var(--icon);
+    }
+    .vote-rail svg{width:20px;height:20px;stroke:var(--icon);fill:none;stroke-width:2}
+    .score{font-weight:700}
+    .post-main{padding:12px 16px}
+    .crumb{font-size:12px;color:var(--muted);margin-bottom:4px}
+    .title{font-size:22px;font-weight:700;margin:6px 0 10px}
+    .meta{font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:center}
+    .flair{background:var(--pill);border-radius:999px;padding:2px 8px;font-size:12px;font-weight:600;color:#586069}
+    .actions{display:flex;gap:14px;align-items:center;margin-top:12px;color:var(--icon);font-size:13px}
+    .actions .i{display:flex;gap:6px;align-items:center}
+    .actions svg{width:18px;height:18px;stroke:var(--icon);fill:none;stroke-width:2}
+
+    /* Comments – style like your screenshot */
+    .comments{margin-top:16px}
+    .section-h{font-size:14px;color:#6b6f76;margin:8px 0 12px}
+    .cmt{
+      background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+      display:grid;grid-template-columns:48px 1fr;gap:0;margin:0 0 12px 0;padding:14px 12px;
+    }
+    .avatar{
+      width:40px;height:40px;border-radius:50%;background:#e6f2ff;display:grid;place-items:center;
+      font-weight:700;color:#1e3a8a;margin-top:2px;overflow:hidden;
+    }
+    .avatar .img{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#fef3c7,#fde68a)}
+    .c-body{min-width:0}
+    .c-head{display:flex;gap:8px;align-items:center;font-size:14px;color:#6b7280}
+    .c-user{font-weight:700;color:#1a1a1b}
+    .c-text{margin-top:8px;line-height:1.65;font-size:16px;white-space:pre-wrap}
+    .c-actions{
+      display:flex;gap:18px;align-items:center;color:var(--icon);font-size:14px;margin-top:14px;
+    }
+    .vote-inline{display:flex;gap:10px;align-items:center}
+    .vote-inline svg{width:20px;height:20px;stroke:var(--icon);fill:none;stroke-width:2}
+    .k{font-weight:600;color:#374151}
+    .c-actions .i{display:flex;gap:8px;align-items:center}
+    .dots{font-weight:700;letter-spacing:2px}
+
+    /* Sidebar – keep only user card */
+    .card{
+      background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;
+    }
+    .card h3{margin:0 0 8px;font-size:16px}
+    .user{
+      display:grid;grid-template-columns:48px 1fr;gap:10px;align-items:center;margin-bottom:10px;
+    }
+    .pfp{width:48px;height:48px;border-radius:50%;background:#ffe4d6;display:grid;place-items:center;font-weight:700;color:#c2410c}
+    .stat{font-size:13px;color:#6b6f76}
+    .divider{height:1px;background:var(--border);margin:10px 0}
+
+    /* Non-interactive look */
+    .actions .i,.c-actions .i,.btn,.vote-inline,.vote-rail{cursor:default}
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="hdr">
+    <div class="logo">
+      <span class="snoo">
+        <!-- simple alien head -->
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12.5" r="5.5"/>
+            <circle cx="10" cy="12" r="1"/>
+            <circle cx="14" cy="12" r="1"/>
+            <path d="M14.5 8.5l3-2m0 0 1.5.7"/>
+          </g>
+        </svg>
+        <span class="ant"></span>
+      </span>
+      reddit
+    </div>
+    <div class="search"><input type="text" value="Search in r/weather" readonly></div>
+    <div class="auth">
+      <div class="btn">Log In</div>
+      <div class="btn primary">Sign Up</div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <!-- Content -->
+    <div>
+      <!-- Post -->
+      <article class="post" aria-label="Reddit post">
+        <div class="vote-rail" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M6 14l6-6 6 6"/></svg>
+          <div class="score">1.6k</div>
+          <svg viewBox="0 0 24 24"><path d="M18 10l-6 6-6-6"/></svg>
+        </div>
+        <div class="post-main">
+          <div class="crumb"><strong>r/weather</strong> • Posted by <a class="u" href="#">u/JustAskingBro</a> • 19 days ago</div>
+          <h1 class="title">What causes lightning?</h1>
+          <div class="meta">
+            <span class="flair">Question</span>
+            <span>•</span>
+            <span>65 Comments</span>
+            <span>•</span>
+            <span>Share</span>
+          </div>
+          <div class="actions" aria-hidden="true">
+            <div class="i"><svg viewBox="0 0 24 24"><path d="M8 12l2 2 6-6"/></svg>Save</div>
+            <div class="i"><svg viewBox="0 0 24 24"><path d="M4 12h16M4 6h16M4 18h10"/></svg>Award</div>
+            <div class="i"><svg viewBox="0 0 24 24"><path d="M4 12l8-8 8 8"/></svg>Share</div>
+            <div class="i"><svg viewBox="0 0 24 24"><path d="M12 20V4"/></svg>Report</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Comments -->
+      <section class="comments" aria-label="Comments">
+        <div class="section-h">Top Comments</div>
+
+        <!-- ONLY comment kept: u/BigWeatherTheory -->
+        <div class="cmt">
+          <div class="avatar"><div class="img" aria-hidden="true"></div></div>
+          <div class="c-body">
+            <div class="c-head">
+              <span class="c-user">u/BigWeatherTheory</span>
+              <span>•</span>
+              <span>19 days ago</span>
+            </div>
+            <div class="c-text">
+Within thunderclouds, turbulence is caused by air updrafts, and tiny ice crystals and water droplets are made to collide. During these collisions, a positive charge is acquired by smaller particles, but larger ones are given a negative charge. In a cloud, smaller particles are lifted, while larger ones are pulled downward. As a result of this, opposite charges are separated, and an enormous electrical potential is created. In a thunderstorm, electricity is discharged between cloud regions, and a similar release is observed between the cloud and Earth’s surface. Among lightning strikes, only a quarter are directed toward the ground, and most are retained within clouds. With the use of satellite detectors, lightning activity was mapped globally, and new insights were gained by researchers. According to satellite data, the most lightning is recorded in Central Africa, because storm formation is enhanced by ocean winds and elevated terrain. In the United States, frequent lightning is reported in Florida, where sea breezes from both coasts are pushed inland and forced to converge. At their collision point, warm air is forced upward, so thunderstorms are triggered and intensified. Across seasons, lightning intensity is observed to vary, and distinctive global patterns are revealed. In North America, wildfires are often ignited by lightning in summer, but in South America, damp conditions prevent such fires from spreading. Over oceanic areas, lightning is rarely observed, because water warms more slowly than land and less convection is generated. On some Pacific islands, lightning is seen so rarely that no local word exists for it, and cultural references to it are absent. Through lightning research, forecasting is improved, and deadly storms can be predicted more effectively in advance.
+            </div>
+            <div class="c-actions" aria-hidden="true">
+              <div class="vote-inline">
+                <svg viewBox="0 0 24 24"><path d="M6 14l6-6 6 6"/></svg>
+                <span class="k">142</span>
+                <svg viewBox="0 0 24 24"><path d="M18 10l-6 6-6-6"/></svg>
+              </div>
+              <div class="i"><svg viewBox="0 0 24 24"><path d="M9 21V9l12-3-4 12H9zM3 21h6"/></svg>Reply</div>
+              <div class="i"><svg viewBox="0 0 24 24"><path d="M8 12l2 2 6-6"/></svg>Award</div>
+              <div class="i"><svg viewBox="0 0 24 24"><path d="M4 12l8-8 8 8"/></svg>Share</div>
+              <div class="i dots">···</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Sidebar: keep only user card -->
+    <aside class="sidebar">
+      <div class="card">
+        <h3>About u/BigWeatherTheory</h3>
+        <div class="user">
+          <div class="pfp">BW</div>
+          <div>
+            <div style="font-weight:700;">u/BigWeatherTheory</div>
+            <div class="stat">Joined 2017 • r/AskScience, r/MidwestWeather</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="stat">Karma: 84,200</div>
+        <div class="stat">“Weather nerd with a soft spot for mesoscale magic.”</div>
+      </div>
+    </aside>
+  </div>
+</body>
+</html>
