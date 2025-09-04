@@ -30,10 +30,11 @@
     /* Header */
     .hdr{
       position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);
-      padding:10px 14px;display:flex;align-items:center;gap:14px;
+      padding:12px 16px; /* slightly bigger for larger logo */
+      display:flex;align-items:center;gap:14px;
     }
     .logo{display:flex;align-items:center;gap:8px;font-weight:700;}
-    .logo-img{height:26px;width:auto;display:block}
+    .logo-img{height:36px;width:auto;display:block} /* increased from 26px */
     .hdr .search{flex:1;display:flex}
     .hdr .search input{
       width:100%;border:1px solid var(--border);background:#f0f2f5;border-radius:999px;padding:10px 14px;outline:none;font-size:14px;
@@ -181,7 +182,7 @@ Within thunderclouds, turbulence is caused by air updrafts, and tiny ice crystal
       </section>
     </div>
 
-    <!-- Sidebar: keep only user card -->
+    <!-- Sidebar -->
     <aside class="sidebar">
       <div class="card">
         <h3>About u/BigWeatherTheory</h3>
