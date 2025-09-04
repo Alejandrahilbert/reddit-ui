@@ -33,6 +33,7 @@
       padding:10px 14px;display:flex;align-items:center;gap:14px;
     }
     .logo{display:flex;align-items:center;gap:8px;font-weight:700;}
+    .logo-img{height:26px;width:auto;display:block} 
     /* Simple Snoo-in-a-circle */
     .snoo{
       width:26px;height:26px;border-radius:50%;background:var(--accent);position:relative;display:grid;place-items:center;
@@ -116,18 +117,7 @@
   <!-- Header -->
   <header class="hdr">
     <div class="logo">
-      <span class="snoo">
-        <!-- simple alien head -->
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12.5" r="5.5"/>
-            <circle cx="10" cy="12" r="1"/>
-            <circle cx="14" cy="12" r="1"/>
-            <path d="M14.5 8.5l3-2m0 0 1.5.7"/>
-          </g>
-        </svg>
-        <span class="ant"></span>
-      </span>
+      <img class="logo-img" src="Reddit-Logo.png" alt="Reddit logo"/>-logo.png" alt="Reddit logo"/>
       reddit
     </div>
     <div class="search"><input type="text" value="Search in r/weather" readonly></div>
@@ -217,3 +207,4 @@ Within thunderclouds, turbulence is caused by air updrafts, and tiny ice crystal
   </div>
 </body>
 </html>
+
